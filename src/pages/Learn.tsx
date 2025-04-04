@@ -1,14 +1,21 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import LearningModule from "@/components/learning/LearningModule";
 import RoadmapModule from "@/components/learning/RoadmapModule";
 import LessonCard from "@/components/learning/LessonCard";
 import Quiz from "@/components/learning/Quiz";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Check, CheckCircle } from "lucide-react";
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Check, 
+  CheckCircle,
+  BookOpen,
+  Award
+} from "lucide-react";
 import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
 import { 
@@ -22,6 +29,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const mockQuizQuestions = [
   {
@@ -142,7 +150,6 @@ const mockLearningModules = [
   }
 ];
 
-// Lesson content types for the Duolingo-style learning
 const LESSON_CONTENT_TYPES = {
   TEXT: 'text',
   IMAGE: 'image',
@@ -151,7 +158,6 @@ const LESSON_CONTENT_TYPES = {
   QUIZ: 'quiz'
 };
 
-// Sample lesson content for Duolingo-style learning
 const mockLessonContent = {
   "fb-4": [
     {
@@ -195,7 +201,6 @@ const mockLessonContent = {
     }
   ],
   "sm-3": [
-    // Content for Stock Market Analysis Techniques
     {
       type: LESSON_CONTENT_TYPES.TEXT,
       content: "# Stock Market Analysis Techniques\n\nInvestors use various techniques to analyze stocks and make investment decisions. The two main approaches are Fundamental Analysis and Technical Analysis."
@@ -250,7 +255,6 @@ const Learn = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Check URL for module parameter
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const moduleParam = searchParams.get('module');
@@ -267,7 +271,6 @@ const Learn = () => {
     setActiveModule(moduleId);
     setActiveTab("current");
     
-    // Update URL with module parameter
     navigate(`/learn?module=${moduleId}`);
     
     toast.success(`Starting module: ${mockLearningModules.find(m => m.id === moduleId)?.title}`, {
@@ -286,7 +289,6 @@ const Learn = () => {
     });
     setShowQuiz(false);
     
-    // If score is good, unlock next module
     if (score >= 2) {
       toast("🏆 New module unlocked: Mutual Funds", {
         description: "Check it out in your learning roadmap",
@@ -320,17 +322,14 @@ const Learn = () => {
       setLessonStep(prev => prev + 1);
       setDuolingoProgress(((lessonStep + 1) / (lessonContent.length - 1)) * 100);
     } else {
-      // Lesson complete
       setShowDuolingoLesson(false);
       
-      // Mark lesson as completed in mockData (in a real app, this would update an API)
       const moduleIndex = mockLearningModules.findIndex(m => m.id === activeModule);
       if (moduleIndex >= 0) {
         const lessonIndex = mockLearningModules[moduleIndex].lessons.findIndex(l => l.id === activeLessonId);
         if (lessonIndex >= 0) {
           mockLearningModules[moduleIndex].lessons[lessonIndex].isCompleted = true;
           
-          // Update progress
           const completedLessons = mockLearningModules[moduleIndex].lessons.filter(l => l.isCompleted).length;
           const totalLessons = mockLearningModules[moduleIndex].lessons.length;
           mockLearningModules[moduleIndex].progress = Math.round((completedLessons / totalLessons) * 100);
@@ -352,12 +351,10 @@ const Learn = () => {
     }
   };
   
-  // Get the current module details
   const currentModule = activeModule 
     ? mockLearningModules.find(m => m.id === activeModule) 
     : mockLearningModules.find(m => m.progress > 0);
   
-  // Render Duolingo-style lesson content
   const renderLessonContent = () => {
     if (!activeLessonId) return null;
     
@@ -425,7 +422,6 @@ const Learn = () => {
                         duration: 3000
                       });
                     }
-                    // Short delay before moving to next step
                     setTimeout(handleNextStep, 1500);
                   }}
                   className="bg-white p-3 rounded-md shadow-sm hover:bg-blue-50 cursor-pointer transition-colors"
