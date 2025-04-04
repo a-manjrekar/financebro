@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import UserAvatar from "@/components/UserAvatar";
+import { useNavigate } from "react-router-dom";
 
 interface ExpertCardProps {
   id: string;
@@ -30,6 +31,8 @@ const ExpertCard = ({
   isAvailable = true,
   onClick,
 }: ExpertCardProps) => {
+  const navigate = useNavigate();
+  
   const renderStars = () => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -53,8 +56,12 @@ const ExpertCard = ({
     return stars;
   };
   
+  const handleCardClick = () => {
+    navigate(`/qa/expert/${id}`);
+  };
+  
   return (
-    <Card className="overflow-hidden card-hover">
+    <Card className="overflow-hidden card-hover cursor-pointer" onClick={handleCardClick}>
       <CardContent className="p-4">
         <div className="flex items-center gap-4">
           <UserAvatar 
@@ -95,7 +102,10 @@ const ExpertCard = ({
         
         <Button 
           disabled={!isAvailable}
-          onClick={onClick}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent card click
+            onClick();
+          }}
         >
           {isAvailable ? "Book Session" : "Unavailable"}
         </Button>

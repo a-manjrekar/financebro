@@ -5,8 +5,9 @@ import WalletCard from "@/components/WalletCard";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Clock, ArrowUpRight, ArrowDownLeft, ArrowRight } from "lucide-react";
+import { Clock, ArrowUpRight, ArrowDownLeft, ArrowRight, Wallet as WalletIcon } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 // Mock transaction data
 const transactions = [
@@ -16,6 +17,7 @@ const transactions = [
   { id: "4", type: "earn", title: "Completed Finance Basics Module", amount: 100, timestamp: "3d ago" },
   { id: "5", type: "earn", title: "Referral Bonus", amount: 100, timestamp: "1w ago" },
   { id: "6", type: "spend", title: "Contest Entry Fee", amount: 50, timestamp: "1w ago" },
+  { id: "7", type: "withdraw", title: "Withdrawal to Bank Account", amount: 300, timestamp: "2w ago" },
 ];
 
 const rewards = [
@@ -26,6 +28,8 @@ const rewards = [
 ];
 
 const Wallet = () => {
+  const navigate = useNavigate();
+  
   const handleReferral = () => {
     // In a real app, this would open a share dialog
     toast.success("Referral link copied to clipboard!", {
@@ -50,6 +54,10 @@ const Wallet = () => {
     }
   };
   
+  const handleWithdraw = () => {
+    navigate("/wallet/withdraw");
+  };
+  
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <Header />
@@ -70,6 +78,16 @@ const Wallet = () => {
           />
         </div>
         
+        <div className="flex justify-end mb-4">
+          <Button 
+            onClick={handleWithdraw}
+            className="flex items-center"
+          >
+            <WalletIcon className="w-4 h-4 mr-2" />
+            Withdraw Funds
+          </Button>
+        </div>
+        
         <Tabs defaultValue="transactions" className="mb-8">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
@@ -87,10 +105,13 @@ const Wallet = () => {
                     <div key={transaction.id} className="py-3 flex items-center justify-between">
                       <div className="flex items-center">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
-                          transaction.type === "earn" ? "bg-green-100" : "bg-red-100"
+                          transaction.type === "earn" ? "bg-green-100" : 
+                          transaction.type === "withdraw" ? "bg-blue-100" : "bg-red-100"
                         }`}>
                           {transaction.type === "earn" ? (
                             <ArrowDownLeft className={`w-5 h-5 text-green-600`} />
+                          ) : transaction.type === "withdraw" ? (
+                            <WalletIcon className={`w-5 h-5 text-blue-600`} />
                           ) : (
                             <ArrowUpRight className={`w-5 h-5 text-red-600`} />
                           )}
@@ -106,7 +127,8 @@ const Wallet = () => {
                       </div>
                       
                       <div className={`font-bold ${
-                        transaction.type === "earn" ? "text-green-600" : "text-red-600"
+                        transaction.type === "earn" ? "text-green-600" : 
+                        transaction.type === "withdraw" ? "text-blue-600" : "text-red-600"
                       }`}>
                         {transaction.type === "earn" ? "+" : "-"}{transaction.amount} coins
                       </div>

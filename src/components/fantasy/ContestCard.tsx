@@ -3,8 +3,10 @@ import { Calendar, Clock, Trophy, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 interface ContestCardProps {
+  id: string;
   title: string;
   description: string;
   startTime: string;
@@ -19,6 +21,7 @@ interface ContestCardProps {
 }
 
 const ContestCard = ({
+  id,
   title,
   description,
   startTime,
@@ -31,11 +34,19 @@ const ContestCard = ({
   isJoined = false,
   onJoin,
 }: ContestCardProps) => {
+  const navigate = useNavigate();
+  
+  const handleCardClick = () => {
+    navigate(`/fantasy/contest/${id}`);
+  };
+  
   return (
     <Card className={cn(
-      "overflow-hidden card-hover",
+      "overflow-hidden card-hover cursor-pointer",
       isFeatured && "border-electric-blue"
-    )}>
+    )}
+    onClick={handleCardClick}
+    >
       {isFeatured && (
         <div className="bg-electric-blue text-white text-xs font-medium py-1 px-4 text-center">
           Featured Contest
@@ -60,7 +71,7 @@ const ContestCard = ({
             
             <div className="flex items-center">
               <Trophy className="w-4 h-4 mr-2 text-yellow-500" />
-              <span>₹{prizePool.toLocaleString()}</span>
+              <span className="font-medium text-green-600">₹{prizePool.toLocaleString()}</span>
             </div>
             
             <div className="flex items-center">
@@ -93,7 +104,10 @@ const ContestCard = ({
         
         <Button 
           variant={isJoined ? "outline" : "default"}
-          onClick={onJoin}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent card click
+            onJoin();
+          }}
         >
           {isJoined ? "Joined" : "Join Contest"}
         </Button>

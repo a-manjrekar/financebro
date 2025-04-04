@@ -1,11 +1,8 @@
 
-import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { MessageSquare, ThumbsUp, ThumbsDown } from "lucide-react";
-import UserAvatar from "@/components/UserAvatar";
-import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
+import { Calendar, MessageSquare, ThumbsUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface QuestionCardProps {
   id: string;
@@ -13,11 +10,10 @@ interface QuestionCardProps {
   content: string;
   tags: string[];
   authorName: string;
-  authorAvatar?: string;
   createdAt: string;
   answersCount: number;
   likes: number;
-  isAnswered?: boolean;
+  isAnswered: boolean;
   onClick: () => void;
 }
 
@@ -27,86 +23,70 @@ const QuestionCard = ({
   content,
   tags,
   authorName,
-  authorAvatar,
   createdAt,
   answersCount,
   likes,
-  isAnswered = false,
+  isAnswered,
   onClick,
 }: QuestionCardProps) => {
-  const [liked, setLiked] = useState(false);
-  const [localLikes, setLocalLikes] = useState(likes);
+  const navigate = useNavigate();
   
-  const handleLike = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!liked) {
-      setLocalLikes(localLikes + 1);
-      setLiked(true);
-    } else {
-      setLocalLikes(localLikes - 1);
-      setLiked(false);
-    }
+  const handleClick = () => {
+    navigate(`/qa/question/${id}`);
   };
   
   return (
-    <Card className="cursor-pointer card-hover" onClick={onClick}>
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-start">
-          <h3 className="font-bold text-lg">{title}</h3>
-          {isAnswered && (
-            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-              Answered
-            </Badge>
-          )}
-        </div>
-      </CardHeader>
-      
-      <CardContent className="pb-2">
-        <p className="text-gray-600 line-clamp-2 mb-3">{content}</p>
-        
-        <div className="flex flex-wrap gap-2 mb-3">
-          {tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="bg-pastel-blue text-electric-blue">
-              {tag}
-            </Badge>
-          ))}
-        </div>
-        
-        <div className="flex items-center text-sm text-gray-500">
-          <UserAvatar 
-            name={authorName} 
-            image={authorAvatar} 
-            size="sm"
-          />
-          <span className="ml-2">{authorName}</span>
-          <span className="mx-2">•</span>
-          <span>{createdAt}</span>
+    <Card 
+      className="overflow-hidden hover:shadow-md cursor-pointer"
+      onClick={handleClick}
+    >
+      <CardContent className="p-4">
+        <div className="flex items-start gap-4">
+          <div className="flex flex-col items-center">
+            <div className="bg-gray-100 rounded p-1 mb-1">
+              <ThumbsUp className="h-4 w-4 text-gray-500" />
+            </div>
+            <span className="text-sm font-medium">{likes}</span>
+          </div>
+          
+          <div className="flex-1">
+            <h3 className="font-bold text-lg mb-1">{title}</h3>
+            
+            <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+              {content}
+            </p>
+            
+            <div className="flex flex-wrap gap-2 mb-3">
+              {tags.map((tag) => (
+                <Badge key={tag} variant="outline" className="bg-gray-100">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+            
+            <div className="flex flex-wrap items-center justify-between text-xs text-gray-500">
+              <div className="flex items-center">
+                <span className="mr-3">By {authorName}</span>
+                <Calendar className="h-3 w-3 mr-1" />
+                <span>{createdAt}</span>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="flex items-center">
+                  <MessageSquare className="h-3 w-3 mr-1" />
+                  <span>{answersCount} {answersCount === 1 ? 'answer' : 'answers'}</span>
+                </div>
+                
+                {isAnswered && (
+                  <Badge className="bg-green-600">
+                    Answered
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </CardContent>
-      
-      <CardFooter className="pt-2 flex justify-between border-t">
-        <div className="flex items-center text-sm text-gray-500">
-          <MessageSquare className="w-4 h-4 mr-1" />
-          <span>{answersCount} answers</span>
-        </div>
-        
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className={cn(
-            "text-gray-500",
-            liked && "text-electric-blue"
-          )}
-          onClick={handleLike}
-        >
-          {liked ? (
-            <ThumbsUp className="w-4 h-4 mr-1" />
-          ) : (
-            <ThumbsUp className="w-4 h-4 mr-1" />
-          )}
-          <span>{localLikes}</span>
-        </Button>
-      </CardFooter>
     </Card>
   );
 };
