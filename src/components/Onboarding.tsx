@@ -73,7 +73,7 @@ const Onboarding = ({ onComplete }: { onComplete: () => void }) => {
       <Card className="w-full max-w-md mx-auto bg-white/90 backdrop-blur-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold text-electric-blue">
-            Welcome to FinFun
+            Welcome to FinanceBro
           </CardTitle>
           <CardDescription>
             Let's personalize your learning journey

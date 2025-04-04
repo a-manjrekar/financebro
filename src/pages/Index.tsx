@@ -36,7 +36,7 @@ const Index = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pastel-blue via-white to-pastel-green">
         <div className="animate-pulse-scale flex flex-col items-center">
-          <div className="text-4xl font-bold text-electric-blue mb-2">FinFun</div>
+          <div className="text-4xl font-bold text-electric-blue mb-2">FinanceBro</div>
           <div className="text-lg text-gray-600">Loading your financial journey...</div>
         </div>
       </div>
@@ -54,7 +54,7 @@ const Index = () => {
       
       <main className="container max-w-5xl mx-auto p-4">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Welcome to FinFun!</h1>
+          <h1 className="text-3xl font-bold mb-2">Welcome to FinanceBro!</h1>
           <p className="text-gray-600">Your journey to financial literacy starts here.</p>
         </div>
         
@@ -104,7 +104,9 @@ const Index = () => {
               bgColor="bg-pastel-blue"
               progress={75}
               isCompleted={false}
-              onClick={() => {}}
+              onClick={() => {
+                window.location.href = "/learn?module=finance-basics";
+              }}
             />
             
             <TopicCard 
@@ -114,7 +116,9 @@ const Index = () => {
               bgColor="bg-pastel-green"
               progress={30}
               isCompleted={false}
-              onClick={() => {}}
+              onClick={() => {
+                window.location.href = "/learn?module=stock-market";
+              }}
             />
             
             <TopicCard 
