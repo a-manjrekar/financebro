@@ -66,7 +66,7 @@ const Profile = () => {
             <div className="bg-gradient-to-r from-electric-blue to-mint-green h-32" />
             
             <CardContent className="relative pt-0">
-              <div className="flex flex-col sm:flex-row items-center sm:items-end -mt-16 mb-4">
+              <div className="flex flex-col sm:flex-row items-center sm:items-end -mt-1 mb-7">
                 <div className="rounded-full border-4 border-white bg-white">
                   <UserAvatar name={user.name} size="lg" />
                 </div>
