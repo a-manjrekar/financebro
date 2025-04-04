@@ -28,6 +28,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/learn" element={<Learn />} />
+          {/* This route handles displaying specific module content */}
           <Route path="/learn/module/:moduleId" element={<Learn />} />
           <Route path="/fantasy" element={<Fantasy />} />
           <Route path="/fantasy/contest/:contestId" element={<ContestDetail />} />
