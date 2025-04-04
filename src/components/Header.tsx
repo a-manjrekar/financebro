@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "lucide-react";
@@ -44,7 +43,7 @@ const Header = () => {
             <SheetContent>
               <div className="flex flex-col h-full">
                 <div className="flex items-center gap-4 mb-4">
-                  <UserAvatar size="large" />
+                  <UserAvatar size="lg" />
                   <div>
                     <h3 className="font-medium">Rahul Singh</h3>
                     <p className="text-sm text-gray-500">Level 5 Investor</p>
